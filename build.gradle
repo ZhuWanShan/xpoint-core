@@ -1,0 +1,25 @@
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'scala'
+//    apply plugin: 'org.scoverage'
+    apply plugin: "maven"
+
+    sourceCompatibility = 1.8
+
+    project.group   = 'xpoint'
+    project.version = '1.0-SNAPSHOT'
+
+   // checkScoverage {
+   //     minimumRate = 0.8
+   // }
+
+   // apply from: commonDeps
+
+    //processResources {
+    //    filesMatching('***/*//*.xpoint.*.conf') {
+    //        filter {
+    //it.replace('{project.version}', project.version)
+    //        }
+    //    }
+    //}
+}

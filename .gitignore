@@ -1,0 +1,10 @@
+*~
+.DS_Store
+*.log
+.gradle
+build
+.idea
+.template/
+build/
+.gradle/
+bin/*.jar

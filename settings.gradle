@@ -1,0 +1,8 @@
+rootProject.name = 'xpoint-core'
+include 'script-engine'
+include 'api'
+include 'data-access'
+include 'conf'
+include 'api-server'
+//include 'chart-engine'
+

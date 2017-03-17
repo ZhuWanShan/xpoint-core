@@ -1,0 +1,34 @@
+plugins {
+    id 'java' // or 'groovy' Must be explicitly applied
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':api')
+    testCompile 'org.scalatest:scalatest_2.11:3.0.1'
+    testCompile 'com.twitter:finatra-http_2.11:2.6.0:tests'
+    testCompile 'org.scalamock:scalamock-scalatest-support_2.11:3.3.0'
+}
+
+def mainClass='xpoint.server.ApiServerMain'
+
+shadowJar {
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer) {
+        resource = 'reference.conf'
+    }
+    manifest {
+        attributes 'Implementation-Title': "${project.name}", 'Implementation-Version': version
+        attributes 'Main-Class': "${mainClass}"
+    }
+    zip64 true
+
+    dependencies {
+        exclude(dependency{
+            it.moduleGroup == 'jline'
+        })
+    }
+}

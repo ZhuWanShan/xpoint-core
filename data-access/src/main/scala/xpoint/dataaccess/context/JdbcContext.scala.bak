@@ -1,0 +1,14 @@
+package xpoint.dataaccess.context
+
+import io.getquill.{MySQLDialect, SnakeCase, JdbcContext => JC}
+import xpoint.dataaccess.Script
+import xpoint.dataaccess.datasource.MysqlDataSource
+
+/**
+  * Created by Spark Zhu<szhu.spark@gmail.com> on 01/01/2017.
+  */
+object JdbcContext extends JC[MySQLDialect, SnakeCase](MysqlDataSource()) with Context
+
+trait Context extends JC[MySQLDialect, SnakeCase]{
+  implicit val scriptSchema = schemaMeta[Script]("dashboard_functions")
+}

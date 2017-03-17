@@ -1,0 +1,18 @@
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.scala.srcDirs = ["src/main/scala", "src/main/java"]
+    main.java.srcDirs = []
+}
+
+
+dependencies {
+    compile ('org.scala-lang:scala-library:2.11.8')
+    compile ('org.scala-lang:scala-reflect:2.11.8')
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile ('com.twitter:inject-core_2.11:2.6.0')
+    testCompile 'org.scalatest:scalatest_2.11:3.0.1'
+    testCompile 'org.scalamock:scalamock-scalatest-support_2.11:3.3.0'
+}

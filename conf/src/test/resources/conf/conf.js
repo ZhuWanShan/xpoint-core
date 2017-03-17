@@ -1,0 +1,1 @@
+var bar = Java.type("xpoint.conf.Bar").apply("bar");

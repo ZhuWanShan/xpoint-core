@@ -1,0 +1,59 @@
+package xpoint.dataaccess.datasource
+
+import java.io.Closeable
+import java.util.Properties
+import javax.sql.DataSource
+
+import com.zaxxer.hikari.{HikariConfig, HikariDataSource}
+import xpoint.conf.Conf
+
+import scala.util.control.NonFatal
+
+/**
+  * Created by Spark Zhu<szhu.spark@gmail.com> on 30/12/2016.
+  */
+object MysqlDataSource {
+  def apply() : DataSource with Closeable = {
+    val conf = Conf[MySqlPoolConf].getOrElse(MySqlPoolConf())
+    val config = confToProps(conf)
+    try
+      new HikariDataSource(new HikariConfig(config))
+    catch {
+      case NonFatal(ex) =>
+        throw new IllegalStateException(s"Failed to load data source for config: '$config'", ex)
+    }
+  }
+
+  private def confToProps(conf: MySqlPoolConf): Properties = {
+    val prop = new Properties()
+    prop.setProperty("dataSourceClassName", "com.mysql.jdbc.jdbc2.optional.MysqlDataSource")
+    prop.setProperty("dataSource.url", conf.url)
+    prop.setProperty("dataSource.user", conf.user)
+    prop.setProperty("dataSource.password", conf.passwd)
+    prop.setProperty("dataSource.cachePrepStmts", conf.cachePrepStmts.toString)
+    prop.setProperty("dataSource.prepStmtCacheSqlLimit", conf.prepStmtCacheSqlLimit.toString)
+    prop.setProperty("dataSource.prepStmtCacheSize", conf.prepStmtCacheSize.toString)
+    prop.setProperty("connectionTimeout", conf.connectionTimeout.toString)
+    prop
+  }
+}
+
+case class MySqlPoolConf(url: String = "",
+                         user: String = "root",
+                         passwd: String = "",
+                         cachePrepStmts: Boolean =  true,
+                         prepStmtCacheSize: Int = 250,
+                         prepStmtCacheSqlLimit: Int = 2048,
+                         connectionTimeout: Int = 30000
+                        )
+
+/**
+  * ctx.dataSourceClassName=com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+ctx.dataSource.url=jdbc:mysql://host/database
+ctx.dataSource.user=root
+ctx.dataSource.password=root
+ctx.dataSource.cachePrepStmts=true
+ctx.dataSource.prepStmtCacheSize=250
+ctx.dataSource.prepStmtCacheSqlLimit=2048
+ctx.connectionTimeout=30000
+  */

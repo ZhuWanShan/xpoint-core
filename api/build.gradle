@@ -1,0 +1,25 @@
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main.scala.srcDirs = ["src/main/scala", "src/main/java"]
+    main.java.srcDirs = []
+}
+
+dependencies {
+    //compile project(':data-access')
+    compile project(':script-engine')
+    //compile project(':chart-engine')
+    compile ('org.scala-lang:scala-library:2.11.8')
+    compile ('org.scala-lang:scala-reflect:2.11.8')
+    compile ('com.twitter:finatra-http_2.11:2.6.0')
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    compile 'mysql:mysql-connector-java:5.1.39'
+    compile 'org.apache.commons:commons-dbcp2:2.1.1'
+    compile 'com.facebook.presto:presto-jdbc:0.156'
+    compile 'com.norbitltd:spoiwo:1.0.3'
+    testCompile 'org.scalatest:scalatest_2.11:3.0.1'
+    testCompile 'com.twitter:finatra-http_2.11:2.6.0:tests'
+    testCompile 'org.scalamock:scalamock-scalatest-support_2.11:3.3.0'
+}
