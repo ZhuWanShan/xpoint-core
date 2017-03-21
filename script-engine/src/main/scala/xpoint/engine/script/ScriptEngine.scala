@@ -4,9 +4,10 @@ import java.util
 import javax.script._
 
 import com.twitter.inject.Logging
+import com.twitter.util.Future
 import jdk.nashorn.api.scripting.NashornScriptEngineFactory
 import xpoint.conf.Conf
-import xpoint.engine.script.service.SqlService
+import xpoint.engine.script.service.{ScriptHook, SqlService}
 
 import scala.io.Source
 
@@ -18,6 +19,7 @@ trait ScriptEngine extends Logging{
   val nashorn: javax.script.ScriptEngine = new NashornScriptEngineFactory().getScriptEngine("-scripting")
 
   val sql: SqlService
+  val hook: ScriptHook
 
 
   val SYSTEM = new util.HashMap[String, Object]()
@@ -62,10 +64,14 @@ trait ScriptEngine extends Logging{
     initScripts()
   }
 
-  def execute(ctx: Object, function: String, params: Seq[String] = Seq()): Any = {
-    val ctl = new util.HashMap[String, Object]()
-    ctl.put("ctx", ctx)
-    ctl.put("lock", new Lock())
-    engine.asInstanceOf[Invocable].invokeFunction("xpoint_execute", function, ctl, params.toArray)
+  def execute(ctx: Object, function: String, params: Seq[String] = Seq()): Future[Any] = {
+    val id = hook.hook()
+    engine.asInstanceOf[Invocable].invokeFunction("xpoint_execute", id, hook, function, ctx, params.toArray)
+    val rs = hook.result(id)
+    if(rs.isInstanceOf[Throwable]){
+      throw rs.asInstanceOf[Throwable]
+    }else{
+      rs
+    }
   }
 }

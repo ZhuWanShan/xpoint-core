@@ -8,6 +8,7 @@ import xpoint.api._
 import xpoint.api.exception.RootExceptionMapper
 import xpoint.api.service.TokenService
 import xpoint.engine.script.ScriptEngine
+import xpoint.engine.script.service.ScriptHook
 
 
 /**
@@ -16,7 +17,8 @@ import xpoint.engine.script.ScriptEngine
 class ApiServer()
                (
                  implicit val tokenService: TokenService,
-                 implicit val scriptEngine: ScriptEngine
+                 implicit val scriptEngine: ScriptEngine,
+                 implicit val scriptHook: ScriptHook
                ) extends HttpServer{
 
   override protected def configureHttp(router: HttpRouter): Unit = {
